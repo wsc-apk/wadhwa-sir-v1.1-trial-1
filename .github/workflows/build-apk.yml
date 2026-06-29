@@ -14,7 +14,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - run: npm install --legacy-peer-deps
+      - name: Install base deps
+        run: npm install --legacy-peer-deps
+      - name: Install AdMob for Capacitor 5
+        run: npm install @capacitor-community/admob@5.0.2 --save --legacy-peer-deps
       - name: Build web
         run: npm run build
       - name: Sync Capacitor
