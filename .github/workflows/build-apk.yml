@@ -17,7 +17,7 @@ jobs:
       - name: Install base deps
         run: npm install --legacy-peer-deps
       - name: Install AdMob for Capacitor 5
-        run: npm install @capacitor-community/admob@5.0.2 --save --legacy-peer-deps
+        run: npm install @capacitor-community/admob@5 --save --legacy-peer-deps
       - name: Build web
         run: npm run build
       - name: Sync Capacitor
@@ -25,7 +25,7 @@ jobs:
       - name: Build signed APK
         working-directory: android
         run: |
-          ./gradlew assembleRelease \
+         ./gradlew assembleRelease \
             -Pandroid.injected.signing.store.file=../upload-keystore.jks \
             -Pandroid.injected.signing.store.password=Uhk@738_ghRU87@98dfs \
             -Pandroid.injected.signing.key.alias=upload \
