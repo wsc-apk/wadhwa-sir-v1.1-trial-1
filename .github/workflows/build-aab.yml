@@ -17,7 +17,7 @@ jobs:
       - uses: android-actions/setup-android@v3
       - run: npx cap add android || true
       - run: npx cap sync android
-      - name: Configure Android 15 Edge-to-Edge, SDK 36/35, and AdMob ID
+      - name: Configure Android 15 Edge-to-Edge, SDK 36, and AdMob ID
         run: |
           node - <<'NODE'
           const fs=require('fs');
@@ -29,14 +29,14 @@ jobs:
           fs.writeFileSync('capacitor.config.json', JSON.stringify(cfg,null,2));
           NODE
           sed -i "s/compileSdkVersion = [0-9]*/compileSdkVersion = 36/" android/variables.gradle || true
-          sed -i "s/targetSdkVersion = [0-9]*/targetSdkVersion = 35/" android/variables.gradle || true
+          sed -i "s/targetSdkVersion = [0-9]*/targetSdkVersion = 36/" android/variables.gradle || true
           sed -i '/<\/application>/i \        <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8576378038310405~4113931989"/>' android/app/src/main/AndroidManifest.xml
       - name: Install SDK Platforms
-        run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "platforms;android-35"
-      - name: Force version 1.0.9 for Play Console
+        run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
+      - name: Force version 1.1 for Play Console
         run: |
-          sed -i "s/versionCode [0-9]*/versionCode 9/" android/app/build.gradle
-          sed -i "s/versionName \"[^\"]*\"/versionName \"1.0.9\"/" android/app/build.gradle
+          sed -i "s/versionCode [0-9]*/versionCode 10/" android/app/build.gradle
+          sed -i "s/versionName \"[^\"]*\"/versionName \"1.1\"/" android/app/build.gradle
       - run: |
           sudo apt-get update -qq && sudo apt-get install -y imagemagick > /dev/null
           rm -f android/app/src/main/res/mipmap-anydpi-v26/*.xml
