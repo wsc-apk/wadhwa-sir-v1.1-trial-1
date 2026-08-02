@@ -31,9 +31,13 @@ jobs:
           let manifestPath = 'android/app/src/main/AndroidManifest.xml';
           if(fs.existsSync(manifestPath)) {
               let manifest = fs.readFileSync(manifestPath, 'utf8');
+              
+              // 1. Inject AD_ID permission at the TOP (before <application)
               if(!manifest.includes('com.google.android.gms.permission.AD_ID')) {
-                  manifest = manifest.replace('</manifest>', '    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>\n</manifest>');
+                  manifest = manifest.replace('<application', '    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>\n    <application');
               }
+              
+              // 2. Inject AdMob Application ID at the BOTTOM (before </application>)
               if(!manifest.includes('com.google.android.gms.ads.APPLICATION_ID')) {
                   manifest = manifest.replace('</application>', '    <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID" android:value="ca-app-pub-8576378038310405~4113931989"/>\n</application>');
               }
@@ -44,9 +48,9 @@ jobs:
           sed -i "s/targetSdkVersion = [0-9]*/targetSdkVersion = 36/" android/variables.gradle || true
       - name: Install SDK Platforms
         run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
-      - name: Force version 1.1 for Play Console
+      - name: Force version 1.1 (Code 14) for Play Console
         run: |
-          sed -i "s/versionCode [0-9]*/versionCode 13/" android/app/build.gradle
+          sed -i "s/versionCode [0-9]*/versionCode 14/" android/app/build.gradle
           sed -i "s/versionName \"[^\"]*\"/versionName \"1.1\"/" android/app/build.gradle
       - run: |
           sudo apt-get update -qq && sudo apt-get install -y imagemagick > /dev/null
